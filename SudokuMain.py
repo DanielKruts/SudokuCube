@@ -3,6 +3,9 @@
 
 #Might be removed, but starter class definitions for CubeSide and Movement
 class CubeSide:
+    center = face[1][1]
+
+# Youz a bitch
     face = [3][3]
 
 class Cube:
