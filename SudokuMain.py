@@ -14,24 +14,42 @@ class CubeSide:
 
 class Cube:
     def __init__(self):
-        self.Front = CubeSide.centercolor("Y")
-        self.Back = CubeSide.centercolor("P")
-        self.Left = CubeSide.centercolor("B")
-        self.Right = CubeSide.centercolor("G")
-        self.Up = CubeSide.centercolor("O")
-        self.Down = CubeSide.centercolor("R")
+        self.Front = CubeSide
+        self.Back = CubeSide
+        self.Left = CubeSide
+        self.Right = CubeSide
+        self.Up = CubeSide
+        self.Down = CubeSide
 
 # class Movement:
 
 
 
 def initializefunction():
-    print("Front center:", Cube.Front.centervalue)
-    print("Front face:", Cube.Front.facevalue)
-    print("Back center:", Cube.Back.centervalue)
-    print("Left face:", Cube.Left.facevalue)
+    cubeObject = Cube()
+    cubeObject.Front.centercolor = 'Y'
+    cubeObject.Front.centercolor = 'P'
+    cubeObject.Left.centercolor = 'B'
+    cubeObject.Right.centercolor = 'G'
+    cubeObject.Up.centercolor = 'O'
+    cubeObject.Down.centercolor = 'R'
 
-    return Cube
+    
+    cubeObject.Front.facevalue = [[9, 5, 2], [3, 8, 1], [6, 7, 4]]
+    cubeObject.Back.facevalue = [[9, 5, 2], [3, 8, 1], [6, 7, 4]]
+    cubeObject.Left.facevalue = [[7, 1, 8], [2, 4, 6], [9, 3, 5]]
+    cubeObject.Right.facevalue = [[4, 6, 3], [7, 5, 9], [1, 2, 8]]
+    cubeObject.Up.facevalue = [[8, 1, 3], [4, 6, 7], [2, 9, 5]]
+    cubeObject.Down.facevalue = [[1, 2, 8], [5, 3, 9], [7, 4, 6]]
+
+    print("Front center:", cubeObject.Front.centervalue)
+    print("Front face:", cubeObject.Front.facevalue)
+    print("Back center:", cubeObject.Back.centervalue)
+    print("Left face:", cubeObject.Left.facevalue)
+
+    return cubeObject
+
+initializefunction()
 
 
 
