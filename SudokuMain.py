@@ -43,7 +43,7 @@ class Movement:
         self.position = position
         self.direction = direction
         self.path = path if path is not None else []
-        self.temppath = temppath
+        self.temppath = cube
         
 
 
@@ -67,6 +67,7 @@ def initializefunction():
     LC11 = Movement(cubeObject.Left, colrow="C", position=0, direction=1)
 
     applyMovement(FC00)
+    applyMovement(LC00)
 
     printCube(cubeObject)
     
@@ -80,15 +81,25 @@ def applyMovement(movement: Movement):
 
 
 def applyColumnMove(cube, col, direction):
+    tempcol = [cube.facevalue[i][col] for i in range(3)]
+    
+    if (cube.centervalue == "8Y"):
+        print("Front")
+    else:
+        print("Left")
+
+    print(tempcol)
     print("Testing Column Move")
-    print("Cube is ", cube)
+    print("Cube is ", cube.centervalue)
     print("col is ", col)
     print("direction is ", direction)
 
 def applyRowMove(cube, row, direction):
+    temprow = [cube.facevalue[row][i] for i in range(3)]
+
     print("Testing Row Move")
     print("Cube is ", cube)
-    print("col is ", col)
+    print("col is ", row)
     print("direction is ", direction)
 
 
