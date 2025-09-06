@@ -37,15 +37,25 @@ class Movement:
     rotateSide - 
     array of sides path - 
     '''
-    def __init__(self, side, colrow, position):
-        self.side = side
-        self.colRow = colrow
-        self.position = position
+    def __init__(self, Cube, movement colrow, position, direction, path, temppath):
+        self.movement = movement
+        self.movement.side = side
+        self.movement.colRow = colrow
+        self.movement.position = position
+        self.movement.direction = direction
+        self.movement.path = path
+        self.movement.temppath = temppath
+        
+
 
 # This is where our Heuristic for how close the cube is to be solved will go
 
 def initializefunction():
     cubeObject = Cube()
+
+    FC00 = Movement(Front, Column, Left, Down, {}, Front)
+
+
     printCube(cubeObject)
     
 
