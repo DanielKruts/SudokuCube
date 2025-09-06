@@ -9,6 +9,7 @@ Class Movement -
 '''
 #Might be removed, but starter class definitions for CubeSide and Movement
 class CubeSide:
+    # self initialization created for CubeSide to fix centervalue variable issues
     def __init__(self, facevalue, centercolor):
         self.facevalue = facevalue
         self.centercolor = ""
@@ -25,8 +26,6 @@ class Cube:
 
 # class Movement:
 
-
-
 def initializefunction():
     cubeObject = Cube()
     
@@ -37,9 +36,4 @@ def initializefunction():
     
     return cubeObject
 
-
 initializefunction()
-
-
-
-
