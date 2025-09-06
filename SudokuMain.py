@@ -16,6 +16,7 @@ class CubeSide:
         self.centercolor = centercolor
         self.centervalue = str(facevalue[1][1]) + self.centercolor
 
+#Creates a cube with 6 predetermined sides of a solved cube
 class Cube:
     def __init__(self):
         self.Front = CubeSide([[9, 5, 2], [3, 8, 1], [6, 7, 4]], 'Y')
@@ -26,6 +27,20 @@ class Cube:
         self.Down = CubeSide([[1, 2, 8], [5, 3, 9], [7, 4, 6]], 'R')
 
 # Class Movement
+class Movement:
+    '''
+    Self initialization takes multiple parameters
+    side - Side of the cube to be moved
+    colRow - Whether the movement is of a column or row (0: column, 1:row)
+    position - 
+    movement - 
+    rotateSide - 
+    array of sides path - 
+    '''
+    def __init__(self, side, colrow, position):
+        self.side = side
+        self.colRow = colrow
+        self.position = position
 
 # This is where our Heuristic for how close the cube is to be solved will go
 
