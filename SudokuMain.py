@@ -6,6 +6,7 @@ Classes -
 Class Movement - 
     12 (Cube Side, Column/Row - Binary, Position - Binary, Movement(Up/Down) 
     Binary, Roate Side, Array of Sides path, Temp side(Maybe0))
+Test Hoe
 '''
 #Might be removed, but starter class definitions for CubeSide and Movement
 class CubeSide:
