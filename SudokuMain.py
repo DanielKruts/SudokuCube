@@ -33,18 +33,17 @@ class Movement:
     side - Side of the cube to be moved
     colRow - Whether the movement is of a column or row (0: column, 1:row)
     position - 
-    movement - 
+    movement -
     rotateSide - 
     array of sides path - 
     '''
-    def __init__(self, Cube, movement colrow, position, direction, path, temppath):
-        self.movement = movement
-        self.movement.side = side
-        self.movement.colRow = colrow
-        self.movement.position = position
-        self.movement.direction = direction
-        self.movement.path = path
-        self.movement.temppath = temppath
+    def __init__(self, cube, colrow, position, direction, path=None, temppath=None):
+        self.cube = cube
+        self.colRow = colrow
+        self.position = position
+        self.direction = direction
+        self.path = path if path is not None else []
+        self.temppath = temppath
         
 
 
@@ -53,11 +52,45 @@ class Movement:
 def initializefunction():
     cubeObject = Cube()
 
-    FC00 = Movement(Front, Column, Left, Down, {}, Front)
+    FC00 = Movement(cubeObject.Front, colrow="C", position=0, direction=0)
+    FC01 = Movement(cubeObject.Front, colrow="C", position=0, direction=1)
+    FC10 = Movement(cubeObject.Front, colrow="C", position=0, direction=1)
+    FC11 = Movement(cubeObject.Front, colrow="C", position=0, direction=1)
+    FR00 = Movement(cubeObject.Front, colrow="R", position=0, direction=0)
+    FR01 = Movement(cubeObject.Front, colrow="R", position=0, direction=1)
+    FR10 = Movement(cubeObject.Front, colrow="R", position=0, direction=0)
+    FR11 = Movement(cubeObject.Front, colrow="R", position=0, direction=1)
 
+    LC00 = Movement(cubeObject.Left, colrow="C", position=0, direction=0)
+    LC01 = Movement(cubeObject.Left, colrow="C", position=0, direction=1)
+    LC10 = Movement(cubeObject.Left, colrow="C", position=0, direction=0)
+    LC11 = Movement(cubeObject.Left, colrow="C", position=0, direction=1)
+
+    applyMovement(FC00)
 
     printCube(cubeObject)
     
+def applyMovement(movement: Movement):
+    cube = movement.cube
+
+    if movement.colRow == "C":  # column move
+        applyColumnMove(cube, movement.position, movement.direction)
+    elif movement.colRow == "R":  # row move
+        applyRowMove(cube, movement.position, movement.direction)
+
+
+def applyColumnMove(cube, col, direction):
+    print("Testing Column Move")
+    print("Cube is ", cube)
+    print("col is ", col)
+    print("direction is ", direction)
+
+def applyRowMove(cube, row, direction):
+    print("Testing Row Move")
+    print("Cube is ", cube)
+    print("col is ", col)
+    print("direction is ", direction)
+
 
 def printCube(cubeObject):
     # Takes a looper iterating through the desired values of the sides of the cube and prints them in a readable format
