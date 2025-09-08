@@ -51,6 +51,7 @@ class Movement:
 # This is where our Heuristic for how close the cube is to be solved will go
 
 def initializefunction():
+
     cubeObject = Cube()
 
     FC00 = Movement(cubeObject.Front, colrow="C", position=0, direction=0, name = "FC00")
@@ -71,6 +72,10 @@ def initializefunction():
     applyMovement(LC00, cubeObject)
 
     printCube(cubeObject)
+
+    movelist = [FC00, FC01, FC10, FC11, FR00, FR01, FR10, FR11, LC00, LC01, LC10, LC11]
+
+    return movelist
     
 
 def applyMovement(movement: Movement, cubeObject):
@@ -138,6 +143,13 @@ def applyRowMove(cube, row, direction, name, cubeObject):
     else:
         print("Invalid Parameters")
 
+    if (row == 0):
+        rotateface = cubeObject.Top
+    elif (row == 2):
+        rotateface = cubeObject.Bottom
+    else:
+        print("Invalid Parameters")
+
 
 def printCube(cubeObject):
     # Takes a looper iterating through the desired values of the sides of the cube and prints them in a readable format
@@ -160,11 +172,10 @@ def printCube(cubeObject):
     for i in [cubeObject.Down]:
             print(f"\t {i.facevalue[0]}\n\t {i.facevalue[1]}\n\t {i.facevalue[2]}")
     
+import random
 
-
-initializefunction()
+movelist = initializefunction()
 cubeObject = Cube()
-
 newmove = 1
 
 while(newmove == 1):
@@ -173,7 +184,12 @@ while(newmove == 1):
     match user_input:
         case "Y" | "y":
             print("Alright bruv")
+            random_var = random.randint(0, 11)
+            movechosen = movelist[random_var]
+            print("Random Move is ", movechosen.name)
+            # applyMovement(random_var, cubeObject)
             printCube(cubeObject)
+            previous_var = random_var
         case "N" | "n":
             print("See ya cuh")
             newmove = 0
