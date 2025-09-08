@@ -66,27 +66,22 @@ def initializefunction():
     LC10 = Movement(cubeObject.Left, colrow="C", position=0, direction=0)
     LC11 = Movement(cubeObject.Left, colrow="C", position=0, direction=1)
 
-    applyMovement(FC00)
-    applyMovement(LC00)
+    applyMovement(FC00, cubeObject)
+    applyMovement(LC00, cubeObject)
 
     printCube(cubeObject)
     
-def applyMovement(movement: Movement):
+def applyMovement(movement: Movement, cubeObject):
     cube = movement.cube
 
     if movement.colRow == "C":  # column move
-        applyColumnMove(cube, movement.position, movement.direction)
+        applyColumnMove(cube, movement.position, movement.direction, cubeObject)
     elif movement.colRow == "R":  # row move
-        applyRowMove(cube, movement.position, movement.direction)
+        applyRowMove(cube, movement.position, movement.direction, cubeObject)
 
 
-def applyColumnMove(cube, col, direction):
-    tempcol = [cube.facevalue[i][col] for i in range(3)]
-    
-    if (cube.centervalue == "8Y"):
-        print("Front")
-    else:
-        print("Left")
+def applyColumnMove(cube, col, direction, cubeObject):
+    tempcol = [cube.facevalue[i][col] for i in range(3)] # initializing the temp col
 
     print(tempcol)
     print("Testing Column Move")
@@ -94,25 +89,44 @@ def applyColumnMove(cube, col, direction):
     print("col is ", col)
     print("direction is ", direction)
 
-    if ((direction == 0) && (cube.centervalue == "8Y")):
-        path = [cube.Front, cube.Up, cube.Back, cube.Down]
-    elif (direction == 1) && (cube.centervalue == "8Y"):
-        path = [cube.Front, cube.Up, cube.Back, cube.Down]
-    elif (direction == 0) && (cube.centervalue == "4B"):
-        path = [cube.Front, cube.Up, cube.Back, cube.Down]
-    elif (direction == 1) && (cube.centervalue == "4B"):
-        path = [cube.Front, cube.Up, cube.Back, cube.Down]
+    if (direction == 0) and (cube.centervalue == "8Y"): # Down on Front side
+        path = [cubeObject.Front, cubeObject.Down, cubeObject.Back, cubeObject.Up]
+    elif (direction == 1) and (cube.centervalue == "8Y"): # Up on Front side
+        path = [cubeObject.Front, cubeObject.Up, cubeObject.Back, cubeObject.Down]
+    elif (direction == 0) and (cube.centervalue == "4B"): # Down on Left side
+        path = [cubeObject.Left, cubeObject.Down, cubeObject.Right, cubeObject.Up] 
+    elif (direction == 1) and (cube.centervalue == "4B"): # Up on Left side
+        path = [cubeObject.Left, cubeObject.Up, cubeObject.Right, cubeObject.Down]
+    else:
+        print("Invalid Parameters")
+
+    if (cube.centervalue == "8Y" and col == 0): # rotating left column on front side, rotating face is left side
+        rotateface = cubeObject.Left
+    elif (cube.centervalue == "8Y" and col == 1): # rotating right column on front side, rotating face is right side
+        rotateface = cubeObject.Right
+    elif (cube.centervalue == "4G" and col == 0): # rotating left column on left side, rotating face is back side
+        rotateface = cubeObject.Back
+    elif (cube.centervalue == "4G" and col == 1): # rotating right column on left side, rotating face is front side
+        rotateface = cubeObject.Front
     else:
         print("Invalid Parameters")
 
 
-def applyRowMove(cube, row, direction):
-    temprow = [cube.facevalue[row][i] for i in range(3)]
+def applyRowMove(cube, row, direction, cubeObject):
+
+    temprow = [cube.facevalue[row][i] for i in range(3)] # initializing the temp row
 
     print("Testing Row Move")
     print("Cube is ", cube)
     print("col is ", row)
     print("direction is ", direction)
+
+    if (direction == 0) and (cubeObject.centervalue == "8Y"): # Left on Front side
+        path = [cubeObject.Front, cubeObject.Left, cubeObject.Back, cubeObject.Right]
+    elif (direction == 1) and (cubeObject.centervalue == "8Y"): # Right on Front side
+        path = [cubeObject.Front, cubeObject.Right, cubeObject.Back, cubeObject.Left]
+    else:
+        print("Invalid Parameters")
 
 
 def printCube(cubeObject):
