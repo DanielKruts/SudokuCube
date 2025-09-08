@@ -108,9 +108,6 @@ def applyColumnMove(cube, col, direction, name, cubeObject):
         path = [cubeObject.Left, cubeObject.Up, cubeObject.Right, cubeObject.Down]
     else:
         print("Invalid Parameters")
-        print("Direction is ", direction)
-        print("Cube is ", cube.centervalue)
-
 
     if (cube.centervalue == "8Y" and col == 0): # rotating left column on front side, rotating face is left side
         rotateface = cubeObject.Left
@@ -122,6 +119,8 @@ def applyColumnMove(cube, col, direction, name, cubeObject):
         rotateface = cubeObject.Front
     else:
         print("Invalid Parameters")
+
+
 
 
 def applyRowMove(cube, row, direction, name, cubeObject):
@@ -168,7 +167,7 @@ def printCube(cubeObject):
          print(i.facevalue[2], end="")
     print("")
     for i in [cubeObject.Down]:
-            print(f"\t {i.facevalue[0]}\n\t {i.facevalue[1]}\n\t {i.facevalue[2]}")
+         print(f"\t {i.facevalue[0]}\n\t {i.facevalue[1]}\n\t {i.facevalue[2]}")
     
 import random
 
