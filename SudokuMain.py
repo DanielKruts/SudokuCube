@@ -52,32 +52,35 @@ class Movement:
 def initializefunction():
     cubeObject = Cube()
 
-    FC00 = Movement(cubeObject.Front, colrow="C", position=0, direction=0)
-    FC01 = Movement(cubeObject.Front, colrow="C", position=0, direction=1)
-    FC10 = Movement(cubeObject.Front, colrow="C", position=0, direction=1)
-    FC11 = Movement(cubeObject.Front, colrow="C", position=0, direction=1)
-    FR00 = Movement(cubeObject.Front, colrow="R", position=0, direction=0)
-    FR01 = Movement(cubeObject.Front, colrow="R", position=0, direction=1)
-    FR10 = Movement(cubeObject.Front, colrow="R", position=0, direction=0)
-    FR11 = Movement(cubeObject.Front, colrow="R", position=0, direction=1)
+    FC00 = Movement(cubeObject.Front, colrow="C", position=0, direction=0, name = "FC00")
+    FC01 = Movement(cubeObject.Front, colrow="C", position=0, direction=1, name = "FC01")
+    FC10 = Movement(cubeObject.Front, colrow="C", position=1, direction=1, name = "FC10")
+    FC11 = Movement(cubeObject.Front, colrow="C", position=1, direction=1, name = "FC11")
+    FR00 = Movement(cubeObject.Front, colrow="R", position=0, direction=0, name = "FR00")
+    FR01 = Movement(cubeObject.Front, colrow="R", position=0, direction=1, name = "FR01")
+    FR10 = Movement(cubeObject.Front, colrow="R", position=1, direction=0, name = "FR10")
+    FR11 = Movement(cubeObject.Front, colrow="R", position=1, direction=1, name = "FR11")
 
-    LC00 = Movement(cubeObject.Left, colrow="C", position=0, direction=0)
-    LC01 = Movement(cubeObject.Left, colrow="C", position=0, direction=1)
-    LC10 = Movement(cubeObject.Left, colrow="C", position=0, direction=0)
-    LC11 = Movement(cubeObject.Left, colrow="C", position=0, direction=1)
+    LC00 = Movement(cubeObject.Left, colrow="C", position=0, direction=0, name = "LC00")
+    LC01 = Movement(cubeObject.Left, colrow="C", position=0, direction=1, name = "LC01")
+    LC10 = Movement(cubeObject.Left, colrow="C", position=1, direction=0, name = "LC10")
+    LC11 = Movement(cubeObject.Left, colrow="C", position=1, direction=1, name = "LC11")
 
     applyMovement(FC00, cubeObject)
     applyMovement(LC00, cubeObject)
 
     printCube(cubeObject)
     
+
 def applyMovement(movement: Movement, cubeObject):
     cube = movement.cube
+    print("Movement is ")
 
     if movement.colRow == "C":  # column move
         applyColumnMove(cube, movement.position, movement.direction, cubeObject)
     elif movement.colRow == "R":  # row move
         applyRowMove(cube, movement.position, movement.direction, cubeObject)
+
 
 
 def applyColumnMove(cube, col, direction, cubeObject):
@@ -87,7 +90,7 @@ def applyColumnMove(cube, col, direction, cubeObject):
     print("Testing Column Move")
     print("Cube is ", cube.centervalue)
     print("col is ", col)
-    print("direction is ", direction)
+    print("direction is ", direction) # 0 is down, 1 is up
 
     if (direction == 0) and (cube.centervalue == "8Y"): # Down on Front side
         path = [cubeObject.Front, cubeObject.Down, cubeObject.Back, cubeObject.Up]
@@ -99,6 +102,9 @@ def applyColumnMove(cube, col, direction, cubeObject):
         path = [cubeObject.Left, cubeObject.Up, cubeObject.Right, cubeObject.Down]
     else:
         print("Invalid Parameters")
+        print("Direction is ", direction)
+        print("Cube is ", cube.centervalue)
+
 
     if (cube.centervalue == "8Y" and col == 0): # rotating left column on front side, rotating face is left side
         rotateface = cubeObject.Left
