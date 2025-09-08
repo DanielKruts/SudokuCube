@@ -94,6 +94,18 @@ def applyColumnMove(cube, col, direction):
     print("col is ", col)
     print("direction is ", direction)
 
+    if ((direction == 0) && (cube.centervalue == "8Y")):
+        path = [cube.Front, cube.Up, cube.Back, cube.Down]
+    elif (direction == 1) && (cube.centervalue == "8Y"):
+        path = [cube.Front, cube.Up, cube.Back, cube.Down]
+    elif (direction == 0) && (cube.centervalue == "4B"):
+        path = [cube.Front, cube.Up, cube.Back, cube.Down]
+    elif (direction == 1) && (cube.centervalue == "4B"):
+        path = [cube.Front, cube.Up, cube.Back, cube.Down]
+    else:
+        print("Invalid Parameters")
+
+
 def applyRowMove(cube, row, direction):
     temprow = [cube.facevalue[row][i] for i in range(3)]
 
