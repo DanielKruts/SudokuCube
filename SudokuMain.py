@@ -93,7 +93,6 @@ def applyColumnMove(cube, col, direction, name, cubeObject):
     tempcol = [cube.facevalue[i][col] for i in range(3)] # initializing the temp col
 
     print(tempcol)
-    print("Testing Column Move")
     print("Cube is ", cube.centervalue)
     print("col is ", col) # 0 is leftmost column, 2 is rightmost column
     print("direction is ", direction) # 0 is down, 1 is up
@@ -130,23 +129,22 @@ def applyRowMove(cube, row, direction, name, cubeObject):
     temprow = [cube.facevalue[row][i] for i in range(3)] # initializing the temp row
     
     print(temprow)
-    print("Testing Column Move")
     print("Cube is ", cube.centervalue)
     print("row is ", row) # 0 is top row, 2 is bottom row
     print("direction is ", direction) # 0 is left, 1 is right
     print("Movement is ", name)
 
-    if (direction == 0) and (cubeObject.centervalue == "8Y"): # Left on Front side
+    if (direction == 0) and (cube.centervalue == "8Y"): # Left on Front side
         path = [cubeObject.Front, cubeObject.Left, cubeObject.Back, cubeObject.Right]
-    elif (direction == 1) and (cubeObject.centervalue == "8Y"): # Right on Front side
+    elif (direction == 1) and (cube.centervalue == "8Y"): # Right on Front side
         path = [cubeObject.Front, cubeObject.Right, cubeObject.Back, cubeObject.Left]
     else:
         print("Invalid Parameters")
 
     if (row == 0):
-        rotateface = cubeObject.Top
+        rotateface = cubeObject.Up
     elif (row == 2):
-        rotateface = cubeObject.Bottom
+        rotateface = cubeObject.Down
     else:
         print("Invalid Parameters")
 
@@ -185,10 +183,16 @@ while(newmove == 1):
     match user_input:
         case "Y" | "y":
             print("Alright bruv")
+
             random_var = random.randint(0, 11)
+            while random_var == previous_var:
+                print("Same move as last time, rerolling")
+                random_var = random.randint(0, 11)
+
             movechosen = movelist[random_var]
             print("Random Move is ", movechosen.name)
-            # applyMovement(random_var, cubeObject)
+            applyMovement(movechosen, cubeObject)
+
             printCube(cubeObject)
             previous_var = random_var
         case "N" | "n":
