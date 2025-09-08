@@ -177,6 +177,7 @@ import random
 movelist = initializefunction()
 cubeObject = Cube()
 newmove = 1
+previous_var = -1
 
 while(newmove == 1):
     user_input = input("Would you like to complete a move? Y/N:\n")
