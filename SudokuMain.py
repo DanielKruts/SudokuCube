@@ -75,7 +75,7 @@ def initializefunction():
 
     movelist = [FC00, FC01, FC10, FC11, FR00, FR01, FR10, FR11, LC00, LC01, LC10, LC11]
 
-    return movelist
+    return movelist, cubeObject
     
 
 def applyMovement(movement: Movement, cubeObject):
@@ -174,8 +174,8 @@ def printCube(cubeObject):
     
 import random
 
-movelist = initializefunction()
-cubeObject = Cube()
+movelist,cubeObject = initializefunction()
+
 newmove = 1
 previous_var = -1
 
