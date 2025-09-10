@@ -30,148 +30,176 @@ class Cube:
 class Movement:
     '''
     Self initialization takes multiple parameters
-    side - Side of the cube to be moved
-    colRow - Whether the movement is of a column or row (0: column, 1:row)
-    position - 
-    movement -
-    rotateSide - 
-    array of sides path - 
+    cube - the whole Cube object
+    face - which face the move applies to ("Front", "Left", "Right", etc.)
+    colRow - "C" (column) or "R" (row)
+    position - 0 (left/top) or 2 (right/bottom)
+    direction - 0 or 1 (clockwise/counterclockwise or down/up/left/right depending on context)
+    name - shorthand label like "FC00"
     '''
-    def __init__(self, cube, colrow, position, direction, name, path=None, temppath=None):
+    def __init__(self, cube, face, colrow, position, direction, name, path=None):
         self.cube = cube
+        self.face = face
         self.colRow = colrow
         self.position = position
         self.direction = direction
-        self.path = path if path is not None else []
-        self.temppath = cube
         self.name = name
+        self.path = path if path is not None else []
+
+
 # This is where our Heuristic for how close the cube is to be solved will go
+def heuristic(cube: Cube):
+    score = 0
+    i = 0
+    for side in [cube.Front, cube.Back, cube.Left, cube.Right, cube.Up, cube.Down]:
+        currentface = side.facevalue
+        unique(currentface)
+    return score
 
 def initializefunction():
-
     cubeObject = Cube()
 
-    FC00 = Movement(cubeObject.Front, colrow="C", position=0, direction=0, name = "FC00")
-    FC01 = Movement(cubeObject.Front, colrow="C", position=0, direction=1, name = "FC01")
-    FC10 = Movement(cubeObject.Front, colrow="C", position=2, direction=1, name = "FC10")
-    FC11 = Movement(cubeObject.Front, colrow="C", position=2, direction=1, name = "FC11")
-    FR00 = Movement(cubeObject.Front, colrow="R", position=0, direction=0, name = "FR00")
-    FR01 = Movement(cubeObject.Front, colrow="R", position=0, direction=1, name = "FR01")
-    FR10 = Movement(cubeObject.Front, colrow="R", position=2, direction=0, name = "FR10")
-    FR11 = Movement(cubeObject.Front, colrow="R", position=2, direction=1, name = "FR11")
+    FC00 = Movement(cubeObject, face="Front", colrow="C", position=0, direction=0, name="FC00")
+    FC01 = Movement(cubeObject, face="Front", colrow="C", position=0, direction=1, name="FC01")
+    FC10 = Movement(cubeObject, face="Front", colrow="C", position=2, direction=0, name="FC10")
+    FC11 = Movement(cubeObject, face="Front", colrow="C", position=2, direction=1, name="FC11")
 
-    LC00 = Movement(cubeObject.Left, colrow="C", position=0, direction=0, name = "LC00")
-    LC01 = Movement(cubeObject.Left, colrow="C", position=0, direction=1, name = "LC01")
-    LC10 = Movement(cubeObject.Left, colrow="C", position=2, direction=0, name = "LC10")
-    LC11 = Movement(cubeObject.Left, colrow="C", position=2, direction=1, name = "LC11")
+    FR00 = Movement(cubeObject, face="Front", colrow="R", position=0, direction=0, name="FR00")
+    FR01 = Movement(cubeObject, face="Front", colrow="R", position=0, direction=1, name="FR01")
+    FR10 = Movement(cubeObject, face="Front", colrow="R", position=2, direction=0, name="FR10")
+    FR11 = Movement(cubeObject, face="Front", colrow="R", position=2, direction=1, name="FR11")
+
+    LC00 = Movement(cubeObject, face="Left", colrow="C", position=0, direction=0, name="LC00")
+    LC01 = Movement(cubeObject, face="Left", colrow="C", position=0, direction=1, name="LC01")
+    LC10 = Movement(cubeObject, face="Left", colrow="C", position=2, direction=0, name="LC10")
+    LC11 = Movement(cubeObject, face="Left", colrow="C", position=2, direction=1, name="LC11")
 
     printCube(cubeObject)
 
-    movelist = [FC00, FC01, FC10, FC11, FR00, FR01, FR10, FR11, LC00, LC01, LC10, LC11]
+    movelist = [FC00, FC01, FC10, FC11,
+                FR00, FR01, FR10, FR11,
+                LC00, LC01, LC10, LC11]
 
     return movelist, cubeObject
 
-def applyMovement(movement: Movement, cubeObject):
+def applyMovement(movement: Movement):
     cube = movement.cube
-    print("Movement is ")
+    print("Movement is", movement.name)
 
     if movement.colRow == "C":  # column move
-        applyColumnMove(cube, movement.position, movement.direction, movement.name, cubeObject)
+        applyColumnMove(cube, movement.face, movement.position, movement.direction, movement.name)
     elif movement.colRow == "R":  # row move
-        applyRowMove(cube, movement.position, movement.direction, movement.name, cubeObject)
-
-def applyColumnMove(cube, col, direction, name, cubeObject):
-    tempcol = [cube.facevalue[i][col] for i in range(3)] # initializing the temp col
-
-    print(tempcol)
-    print("Cube is ", cube.centervalue)
-    print("col is ", col) # 0 is leftmost column, 2 is rightmost column
-    print("direction is ", direction) # 0 is down, 1 is up
-    print("Movement is ", name)
-
-    if (direction == 0) and (cube.centervalue == "8Y"): # Down on Front side
-        path = [cubeObject.Front, cubeObject.Down, cubeObject.Back, cubeObject.Up]
-    elif (direction == 1) and (cube.centervalue == "8Y"): # Up on Front side
-        path = [cubeObject.Front, cubeObject.Up, cubeObject.Back, cubeObject.Down]
-    elif (direction == 0) and (cube.centervalue == "4B"): # Down on Left side
-        path = [cubeObject.Left, cubeObject.Down, cubeObject.Right, cubeObject.Up] 
-    elif (direction == 1) and (cube.centervalue == "4B"): # Up on Left side
-        path = [cubeObject.Left, cubeObject.Up, cubeObject.Right, cubeObject.Down]
+        applyRowMove(cube, movement.face, movement.position, movement.direction, movement.name)
     else:
-        print("Invalid Parameters")
+        print("Invalid Movement type")
         exit()
-    
-    if cube.centervalue == "8Y":  # Front side
+
+
+def applyColumnMove(cube: Cube, face: str, col: int, direction: int, name: str):
+    print("Column move:", name, "| face:", face, "| col:", col, "| direction:", direction)
+
+    if face == "Front":
         if col == 0:  # Left column
             if direction == 0:  # Down
-                cubeObject.Left.facevalue = rotate_face_clockwise(cubeObject.Left.facevalue)
-            elif direction == 1:  # Up
-                cubeObject.Left.facevalue = rotate_face_counterclockwise(cubeObject.Left.facevalue)
+                cube.Left.facevalue = rotate_face_clockwise(cube.Left.facevalue)
+            else:  # Up
+                cube.Left.facevalue = rotate_face_counterclockwise(cube.Left.facevalue)
         elif col == 2:  # Right column
             if direction == 0:  # Down
-                cubeObject.Right.facevalue = rotate_face_counterclockwise(cubeObject.Right.facevalue)
-            elif direction == 1:  # Up
-                cubeObject.Right.facevalue = rotate_face_clockwise(cubeObject.Right.facevalue)
-    elif cube.centervalue == "4B":  # Left side
+                cube.Right.facevalue = rotate_face_counterclockwise(cube.Right.facevalue)
+            else:  # Up
+                cube.Right.facevalue = rotate_face_clockwise(cube.Right.facevalue)
+        else:
+            print("Invalid column for Front move")
+            exit()
+
+        # TODO: update path shifting for Front col moves
+        move(cube, cube.Front, direction, [cube.Front, cube.Down, cube.Back, cube.Up])
+
+    elif face == "Left":
         if col == 0:  # Left column
             if direction == 0:  # Down
-                cubeObject.Back.facevalue = rotate_face_clockwise(cubeObject.Back.facevalue)
-            elif direction == 1:  # Up
-                cubeObject.Back.facevalue = rotate_face_counterclockwise(cubeObject.Back.facevalue)
+                cube.Back.facevalue = rotate_face_clockwise(cube.Back.facevalue)
+            else:  # Up
+                cube.Back.facevalue = rotate_face_counterclockwise(cube.Back.facevalue)
         elif col == 2:  # Right column
             if direction == 0:  # Down
-                cubeObject.Front.facevalue = rotate_face_counterclockwise(cubeObject.Front.facevalue)
-            elif direction == 1:  # Up
-                cubeObject.Front.facevalue = rotate_face_clockwise(cubeObject.Front.facevalue)
+                cube.Front.facevalue = rotate_face_counterclockwise(cube.Front.facevalue)
+            else:  # Up
+                cube.Front.facevalue = rotate_face_clockwise(cube.Front.facevalue)
+        else:
+            print("Invalid column for Left move")
+            exit()
+
+        # TODO: update path shifting for Left col moves
+        move(cube, cube.Left, direction, [cube.Left, cube.Down, cube.Right, cube.Up])
+
+    else:
+        print("Invalid face for column move")
+        exit()
+
+
+
+
+
+def applyRowMove(cube: Cube, face: str, row: int, direction: int, name: str):
+    print("Row move:", name, "| face:", face, "| row:", row, "| direction:", direction)
+
+    if face == "Front":
+        if row == 0:  # Top row
+            if direction == 0:  # Left
+                cube.Up.facevalue = rotate_face_clockwise(cube.Up.facevalue)
+            else:  # Right
+                cube.Up.facevalue = rotate_face_counterclockwise(cube.Up.facevalue)
+        elif row == 2:  # Bottom row
+            if direction == 0:  # Left
+                cube.Down.facevalue = rotate_face_counterclockwise(cube.Down.facevalue)
+            else:  # Right
+                cube.Down.facevalue = rotate_face_clockwise(cube.Down.facevalue)
+        else:
+            print("Invalid row for Front move")
+            exit()
+
+        # TODO: update path shifting for Front row moves
+        move(cube, cube.Front, direction, [cube.Front, cube.Left, cube.Back, cube.Right])
+
+    else:
+        print("Invalid face for row move")
+        exit()
+
+def get_path_from_movement(movement: Movement):
+    """
+    Returns the faces and strip orientation for a move.
+    face: "Front", "Left", etc.
+    colRow: "C" for column, "R" for row
+    position: 0 (left/top) or 2 (right/bottom)
+    Returns: path_faces [4 CubeSides], path_orientations ["row2", "col0", ...]
+    """
+    cube = movement.cube
+    face = movement.face
+    colRow = movement.colRow
+    position = movement.position
+
+    if colRow == "C":  # Column moves
+        if face == "Front":
+            if position == 0:  # Left column
+                return [cube.Up, cube.Left, cube.Down, cube.Right], ["col0", "col2", "col0", "col2"]
+            elif position == 2:  # Right column
+                return [cube.Up, cube.Right, cube.Down, cube.Left], ["col2", "col2", "col2", "col0"]
+        elif face == "Left":
+            if position == 0:  # Left column
+                return [cube.Up, cube.Back, cube.Down, cube.Front], ["col0", "col2", "col0", "col0"]
+            elif position == 2:  # Right column
+                return [cube.Up, cube.Front, cube.Down, cube.Back], ["col2", "col2", "col2", "col0"]
+    elif colRow == "R":  # Row moves
+            if position == 0:  # Top row
+                return [cube.Up, cube.Right, cube.Down, cube.Left], ["row2", "row0", "row0", "row2"]
+            elif position == 2:  # Bottom row
+                return [cube.Down, cube.Right, cube.Up, cube.Left], ["row2", "row2", "row0", "row0"]
     else:
         print("Invalid Parameters")
         exit()
 
-
-    move(cubeObject, direction, path)
-
-
-def applyRowMove(cube, row, direction, name, cubeObject):
-
-    temprow = [cube.facevalue[row][i] for i in range(3)] # initializing the temp row
-    
-    print(temprow)
-    print("Cube is ", cube.centervalue)
-    print("row is ", row) # 0 is top row, 2 is bottom row
-    print("direction is ", direction) # 0 is left, 1 is right
-    print("Movement is ", name)
-
-    if (direction == 0) and (cube.centervalue == "8Y"): # Left on Front side
-        path = [cubeObject.Front, cubeObject.Left, cubeObject.Back, cubeObject.Right]
-    elif (direction == 1) and (cube.centervalue == "8Y"): # Right on Front side
-        path = [cubeObject.Front, cubeObject.Right, cubeObject.Back, cubeObject.Left]
-    else:
-        print("Invalid Parameters")
-        exit()
-
-    if (row == 0):
-        rotateface = cubeObject.Up.facevalue
-    elif (row == 2):
-        rotateface = cubeObject.Down.facevalue
-    else:
-        print("Invalid Parameters")
-        exit()
-
-    if (direction == 0): # Down movement
-        if (row == 0): # Left Column
-            rotate_face_clockwise(rotateface)
-        elif (row == 2): # Right Column
-            rotate_face_counterclockwise(rotateface)
-    elif (direction == 1): # Up movement
-        if (row == 0):
-            rotate_face_counterclockwise(rotateface)
-        elif (row == 2):
-            rotate_face_clockwise(rotateface)
-    else:
-        print("Invalid Parameters")
-        exit()
-
-    move(cube, direction, path)
 
 # Rotates a given facevalue clockwise
 def rotate_face_clockwise(face):
@@ -182,51 +210,54 @@ def rotate_face_counterclockwise(face):
     return [list(row) for row in zip(*face)][::-1]
 
 #Moves the front face clockwise or counterclockwise, considering the parameter wise, (0 is clockwise, 1 is counterclockwise)
-def move(cube, direction, path):
-    match direction: 
-        case 0: #Clockwise
-        # rotate front face
+def move(cube: Cube, face: CubeSide, direction: int, path: list[CubeSide]):
+    """
+    Rotates the edge strips around a given face.
+    - cube: full Cube object
+    - face: the CubeSide being rotated
+    - direction: 0 = clockwise, 1 = counterclockwise
+    - path: list of 4 CubeSides in the order they wrap around the face
+    """
+    if direction == 0:  # Clockwise
+        face.facevalue = rotate_face_clockwise(face.facevalue)
+    elif direction == 1:  # Counterclockwise
+        face.facevalue = rotate_face_counterclockwise(face.facevalue)
+    else:
+        print("Invalid direction")
+        exit()
 
-        # temp copy of Up bottom row
-            temp = cube.Up.facevalue[2][:]
+    # Each face contributes a row/column to the cycle
+    strips = []
 
-        # Left col -> Up bottom row
-            for i in range(3):
-                cube.Up.facevalue[2][i] = cube.Left.facevalue[2-i][2]
+    # Extract strips
+    for i, side in enumerate(path):
+        if i == 0:   # from bottom row of top/first face
+            strips.append(side.facevalue[2][:])
+        elif i == 1: # from right column
+            strips.append([side.facevalue[j][0] for j in range(3)])
+        elif i == 2: # from top row
+            strips.append(side.facevalue[0][:])
+        elif i == 3: # from left column
+            strips.append([side.facevalue[j][2] for j in range(3)])
 
-        # Down top row -> Left col
-            for i in range(3):
-                cube.Left.facevalue[i][2] = cube.Down.facevalue[0][i]
+    # Rotate strips depending on direction
+    if direction == 0:  # Clockwise
+        new_strips = [strips[-1]] + strips[:-1]
+    else:               # Counterclockwise
+        new_strips = strips[1:] + [strips[0]]
 
-        # Right col -> Down top row
-            for i in range(3):
-                cube.Down.facevalue[0][i] = cube.Right.facevalue[2-i][0]
-                
-        # temp (Up bottom row) -> Right col
-            for i in range(3):
-                cube.Right.facevalue[i][0] = temp[i]
-        case 1:
-        # rotate front face
-            cube.Front.facevalue = rotate_face_counterclockwise(cube.Front.facevalue)
-        
-        # Copy of Up bottom row
-            temp = cube.Up.facevalue[2][:]
-
-        # Right col -> Up bottom row
-            for i in range(3):
-                cube.Up.facevalue[2][i] = cube.Right.facevalue[i][0]
-
-        # Down top row -> Right col
-            for i in range(3):
-                cube.Right.facevalue[i][0] = cube.Down.facevalue[0][2-i]
-
-        # Left col -> Down top row
-            for i in range(3):
-                cube.Down.facevalue[0][i] = cube.Left.facevalue[i][2]
-
-        # temp (Up bottom row) -> Left Col
-            for i in range(3):
-                cube.Left.facevalue[i][2] = temp[2-i]
+    # Write back strips
+    for i, side in enumerate(path):
+        if i == 0:   # bottom row
+            side.facevalue[2] = new_strips[i]
+        elif i == 1: # left column
+            for j in range(3):
+                side.facevalue[j][0] = new_strips[i][j]
+        elif i == 2: # top row
+            side.facevalue[0] = new_strips[i]
+        elif i == 3: # right column
+            for j in range(3):
+                side.facevalue[j][2] = new_strips[i][j]
 
 
 def printCube(cubeObject):
@@ -252,6 +283,7 @@ def printCube(cubeObject):
     print("")
 
 import random
+import numpy as np
 
 movelist,cubeObject = initializefunction()
 
@@ -279,7 +311,9 @@ while(newmove == 1):
 
             movechosen = movelist[random_var]
             print("Random Move is ", movechosen.name)
-            applyMovement(movechosen, cubeObject)
+            pathprint = get_path_from_movement(movechosen)
+            print("Path is", [side.centercolor for side in pathprint[0]], "with orientations", pathprint[1])
+            applyMovement(movechosen)
 
             printCube(cubeObject)
             previous_var = random_var
