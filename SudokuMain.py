@@ -1,4 +1,4 @@
-'''
+﻿'''
 Test
 Classes - 
     CubeSide Class(Stores matrices, center element(string) 4th element) 
@@ -45,9 +45,6 @@ class Movement:
         self.path = path if path is not None else []
         self.temppath = cube
         self.name = name
-        
-
-
 # This is where our Heuristic for how close the cube is to be solved will go
 
 def initializefunction():
@@ -68,15 +65,11 @@ def initializefunction():
     LC10 = Movement(cubeObject.Left, colrow="C", position=2, direction=0, name = "LC10")
     LC11 = Movement(cubeObject.Left, colrow="C", position=2, direction=1, name = "LC11")
 
-    applyMovement(FC00, cubeObject)
-    applyMovement(LC00, cubeObject)
-
     printCube(cubeObject)
 
     movelist = [FC00, FC01, FC10, FC11, FR00, FR01, FR10, FR11, LC00, LC01, LC10, LC11]
 
     return movelist, cubeObject
-    
 
 def applyMovement(movement: Movement, cubeObject):
     cube = movement.cube
@@ -86,8 +79,6 @@ def applyMovement(movement: Movement, cubeObject):
         applyColumnMove(cube, movement.position, movement.direction, movement.name, cubeObject)
     elif movement.colRow == "R":  # row move
         applyRowMove(cube, movement.position, movement.direction, movement.name, cubeObject)
-
-
 
 def applyColumnMove(cube, col, direction, name, cubeObject):
     tempcol = [cube.facevalue[i][col] for i in range(3)] # initializing the temp col
@@ -120,9 +111,6 @@ def applyColumnMove(cube, col, direction, name, cubeObject):
     else:
         print("Invalid Parameters")
 
-
-
-
 def applyRowMove(cube, row, direction, name, cubeObject):
 
     temprow = [cube.facevalue[row][i] for i in range(3)] # initializing the temp row
@@ -147,7 +135,6 @@ def applyRowMove(cube, row, direction, name, cubeObject):
     else:
         print("Invalid Parameters")
 
-
 def printCube(cubeObject):
     # Takes a looper iterating through the desired values of the sides of the cube and prints them in a readable format
     '''
@@ -168,14 +155,77 @@ def printCube(cubeObject):
     print("")
     for i in [cubeObject.Down]:
          print(f"\t {i.facevalue[0]}\n\t {i.facevalue[1]}\n\t {i.facevalue[2]}")
-    
+    print("")
+
+# Rotates a given facevalue clockwise
+def rotate_face_clockwise(face):
+    return [list(row) for row in zip(*face[::-1])]
+
+# Rotates a given facevalue counterclockwise
+def rotate_face_counterclockwise(face):
+    return [list(row) for row in zip(*face)][::-1]
+
+#Moves the front face clockwise or counterclockwise, considering the parameter wise, (0 is clockwise, 1 is counterclockwise)
+def move_front(cube, wise):
+    match wise: 
+        case 0: #Clockwise
+        # rotate front face
+            cube.Front.facevalue = rotate_face_clockwise(cube.Front.facevalue)
+
+        # temp copy of Up bottom row
+            temp = cube.Up.facevalue[2][:]
+
+        # Left col -> Up bottom row
+            for i in range(3):
+                cube.Up.facevalue[2][i] = cube.Left.facevalue[2-i][2]
+
+        # Down top row -> Left col
+            for i in range(3):
+                cube.Left.facevalue[i][2] = cube.Down.facevalue[0][i]
+
+        # Right col -> Down top row
+            for i in range(3):
+                cube.Down.facevalue[0][i] = cube.Right.facevalue[2-i][0]
+                
+        # temp (Up bottom row) -> Right col
+            for i in range(3):
+                cube.Right.facevalue[i][0] = temp[i]
+        case 1:
+        # rotate front face
+            cube.Front.facevalue = rotate_face_counterclockwise(cube.Front.facevalue)
+        
+        # Copy of Up bottom row
+            temp = cube.Up.facevalue[2][:]
+
+        # Right col -> Up bottom row
+            for i in range(3):
+                cube.Up.facevalue[2][i] = cube.Right.facevalue[i][0]
+
+        # Down top row -> Right col
+            for i in range(3):
+                cube.Right.facevalue[i][0] = cube.Down.facevalue[0][2-i]
+
+        # Left col -> Down top row
+            for i in range(3):
+                cube.Down.facevalue[0][i] = cube.Left.facevalue[i][2]
+
+        # temp (Up bottom row) -> Left Col
+            for i in range(3):
+                cube.Left.facevalue[i][2] = temp[2-i]
+
 import random
 
 movelist,cubeObject = initializefunction()
 
+move_front(cubeObject, 1)
+printCube(cubeObject)
+move_front(cubeObject, 0)
+printCube(cubeObject)
+
 newmove = 1
 previous_var = -1
 
+'''
 while(newmove == 1):
     user_input = input("Would you like to complete a move? Y/N:\n")
 
@@ -199,3 +249,4 @@ while(newmove == 1):
             newmove = 0
         case _:
             print("Whachu mean bitch")
+'''
