@@ -99,6 +99,7 @@ def applyColumnMove(cube, col, direction, name, cubeObject):
         path = [cubeObject.Left, cubeObject.Up, cubeObject.Right, cubeObject.Down]
     else:
         print("Invalid Parameters")
+        exit()
 
     if (cube.centervalue == "8Y" and col == 0): # rotating left column on front side, rotating face is left side
         rotateface = cubeObject.Left
@@ -110,6 +111,24 @@ def applyColumnMove(cube, col, direction, name, cubeObject):
         rotateface = cubeObject.Front
     else:
         print("Invalid Parameters")
+        exit()
+
+
+    if (direction == 0): # Down movement
+        if (col == 0): # Left Column
+            rotate_face_clockwise(rotateface)
+        elif (col == 2): # Right Column
+            rotate_face_counterclockwise(rotateface)
+    elif (direction == 1): # Up movement
+        if (col == 0):
+            rotate_face_counterclockwise(rotateface)
+        elif (col == 2):
+            rotate_face_clockwise(rotateface)
+    else:
+        print("Invalid Parameters")
+        exit()
+
+
 
 def applyRowMove(cube, row, direction, name, cubeObject):
 
@@ -127,6 +146,7 @@ def applyRowMove(cube, row, direction, name, cubeObject):
         path = [cubeObject.Front, cubeObject.Right, cubeObject.Back, cubeObject.Left]
     else:
         print("Invalid Parameters")
+        exit()
 
     if (row == 0):
         rotateface = cubeObject.Up
@@ -134,6 +154,9 @@ def applyRowMove(cube, row, direction, name, cubeObject):
         rotateface = cubeObject.Down
     else:
         print("Invalid Parameters")
+        exit()
+
+    
 
 def printCube(cubeObject):
     # Takes a looper iterating through the desired values of the sides of the cube and prints them in a readable format
