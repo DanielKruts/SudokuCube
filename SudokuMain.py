@@ -53,7 +53,8 @@ def heuristic(cube: Cube):
     i = 0
     for side in [cube.Front, cube.Back, cube.Left, cube.Right, cube.Up, cube.Down]:
         currentface = side.facevalue
-        unique(currentface)
+        missingvalues = 9 - len(np.unique(currentface))
+        print(f"Side {side.centervalue} has values {missingvalues}")
     return score
 
 def initializefunction():
@@ -287,6 +288,8 @@ import numpy as np
 
 movelist,cubeObject = initializefunction()
 
+heuristic(cubeObject)
+
 '''
 move(cubeObject, 1)
 printCube(cubeObject)
@@ -316,6 +319,7 @@ while(newmove == 1):
             applyMovement(movechosen)
 
             printCube(cubeObject)
+            heuristic(cubeObject)
             previous_var = random_var
         case "N" | "n":
             print("See ya cuh")
