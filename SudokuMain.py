@@ -9,6 +9,9 @@ Class Movement -
 Test Hoe
 '''
 #Might be removed, but starter class definitions for CubeSide and Movement
+from tkinter.filedialog import Directory
+
+
 class CubeSide:
     # self initialization created for CubeSide to fix centervalue variable issues
     def __init__(self, facevalue, centercolor):
@@ -180,22 +183,29 @@ def get_path_from_movement(movement: Movement):
     face = movement.face
     colRow = movement.colRow
     position = movement.position
+    direction = movement.direction
 
     if colRow == "C":  # Column moves
         if face == "Front":
-            if position == 0:  # Left column
-                return [cube.Up, cube.Left, cube.Down, cube.Right], ["col0", "col2", "col0", "col2"]
-            elif position == 2:  # Right column
-                return [cube.Up, cube.Right, cube.Down, cube.Left], ["col2", "col2", "col2", "col0"]
+            if position == 0:
+                if direction == 0:
+                    return  ["col2", "col0", "col0", "col2"]
+                elif direction == 1:
+                    return  ["col0", "col2", "col2", "col0"]
+            elif position == 2:
+                if direction == 0:
+                    return  ["col2", "col0", "col0", "col2"]
+                elif direction == 1:
+                    return  ["col0", "col2", "col2", "col0"]
         elif face == "Left":
-            if position == 0:  # Left column
-                return [cube.Up, cube.Back, cube.Down, cube.Front], ["col0", "col2", "col0", "col0"]
-            elif position == 2:  # Right column
+            if direction == 0:  # Left column
+                return ["col0", "col2", "col0", "col0"]
+            elif direction == 2:  # Right column
                 return [cube.Up, cube.Front, cube.Down, cube.Back], ["col2", "col2", "col2", "col0"]
     elif colRow == "R":  # Row moves
-            if position == 0:  # Top row
+            if direction == 0:  # Top row
                 return [cube.Up, cube.Right, cube.Down, cube.Left], ["row2", "row0", "row0", "row2"]
-            elif position == 2:  # Bottom row
+            elif direction == 2:  # Bottom row
                 return [cube.Down, cube.Right, cube.Up, cube.Left], ["row2", "row2", "row0", "row0"]
     else:
         print("Invalid Parameters")
@@ -211,7 +221,7 @@ def rotate_face_counterclockwise(face):
     return [list(row) for row in zip(*face)][::-1]
 
 #Moves the front face clockwise or counterclockwise, considering the parameter wise, (0 is clockwise, 1 is counterclockwise)
-def move(cube: Cube, face: CubeSide, direction: int, path: list[CubeSide]):
+def move(movement:Movement, path: list[CubeSide]):
     """
     Rotates the edge strips around a given face.
     - cube: full Cube object
@@ -227,6 +237,32 @@ def move(cube: Cube, face: CubeSide, direction: int, path: list[CubeSide]):
         print("Invalid direction")
         exit()
 
+
+    subsectionarray = []
+    for i, side in enumerate(path):
+        print(f"Path {i}: Face {side.centervalue}")
+        movementalightnment = get_path_from_movement(movement)
+        if movementalightnment[i] == "row0":
+            print("Orientation: Top Row")
+            subsectionarray[i] = path[i].facevalue[0][:]
+        elif movementalightnment[i] == "row2":
+            print("Orientation: Bottom Row")
+            subsectionarray[i] = path[i].facevalue[2][:]
+        elif movementalightnment[i] == "col0":
+            print("Orientation: Left Column")
+            subsectionarray[i] = path[i].facevalue[:][0]
+        elif movementalightnment[i] == "col2":
+            print("Orientation: Right Column")
+            subsectionarray[i] = path[i].facevalue[:][2]
+        else:
+            print("Invalid orientation")
+            exit()
+    
+    i = 1
+    for i, side in enumerate(path):
+        if movementalightnment[i][:3] == movementalightnment[i+1][:3]:
+            path[i].facevalue[0] = path[i-1].facevalue[0][:]
+            
     # Each face contributes a row/column to the cycle
     strips = []
 
