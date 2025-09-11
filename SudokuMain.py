@@ -53,13 +53,21 @@ class Movement:
 
 # This is where our Heuristic for how close the cube is to be solved will go
 def heuristic(cube: Cube):
-    score = 0
-    i = 0
+    heuristicscores = []
+
+    # loop over all 6 faces of the cube
     for side in [cube.Front, cube.Back, cube.Left, cube.Right, cube.Up, cube.Down]:
-        currentface = side.facevalue
-        missingvalues = 9 - len(np.unique(currentface))
-        print(f"Side {side.centervalue} has values {missingvalues}")
-    return score
+        heuristicface = np.array(side.facevalue)
+        flat = heuristicface.flatten()
+        missingvaluesface = 9 - len(np.unique(flat))
+
+        heuristicscores.append(missingvaluesface)
+
+    heuristicevaluation = math.ceil(max(heuristicscores) / 3)
+    print(f"Heuristic evaluation of cube is {heuristicevaluation}")
+    return heuristicevaluation
+
+    
 
 def initializefunction():
     cubeObject = Cube()
@@ -382,6 +390,7 @@ def printCube(cubeObject):
 
 import random
 import numpy as np
+import math
 
 movelist,cubeObject = initializefunction()
 
