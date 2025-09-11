@@ -9,6 +9,7 @@ Class Movement -
 Test Hoe
 '''
 #Might be removed, but starter class definitions for CubeSide and Movement
+from dis import findlinestarts
 from tkinter.filedialog import Directory
 
 
@@ -229,15 +230,75 @@ def move(movement:Movement, path: list[CubeSide]):
     - direction: 0 = clockwise, 1 = counterclockwise
     - path: list of 4 CubeSides in the order they wrap around the face
     """
-    if direction == 0:  # Clockwise
-        face.facevalue = rotate_face_clockwise(face.facevalue)
-    elif direction == 1:  # Counterclockwise
-        face.facevalue = rotate_face_counterclockwise(face.facevalue)
+
+    if movement.direction == 0:  # Clockwise
+            movement.face.facevalue = rotate_face_clockwise(movement.face.facevalue)
+    elif movement.direction == 1:  # Counterclockwise
+            movement.face.facevalue = rotate_face_counterclockwise(movement.face.facevalue)
     else:
-        print("Invalid direction")
+            print("Invalid direction")
+            exit()
+    if movement.face == "Front":
+        if movement.colRow == "R": # Row move
+            if movement.position == 0: # Top row
+                temp = path[0].facevalue[0][:]
+                if movement.direction == 0: # Clockwise
+                    path[2].facevalue[0][:] = path[1].facevalue[0][:]
+                    path[3].facevalue[0][:] = path[2].facevalue[0][:]
+                    path[0].facevalue[0][:] = path[3].facevalue[0][:]
+                    path[1].facevalue[0][:] = temp
+                elif movement.direction == 1: # Counterclockwise
+                    path[2].facevalue[0][:] = path[3].facevalue[0][:]
+                    path[1].facevalue[0][:] = path[2].facevalue[0][:]
+                    path[0].facevalue[0][:] = path[1].facevalue[0][:]
+                    path[3].facevalue[0][:] = temp
+            elif movement.position == 2: # Bottom row
+                temp = path[0].facevalue[2][:]
+                if movement.direction == 0: # Counterclockwise
+                    path[2].facevalue[2][:] = path[3].facevalue[2][:]
+                    path[1].facevalue[2][:] = path[2].facevalue[2][:]
+                    path[0].facevalue[2][:] = path[1].facevalue[2][:]
+                    path[3].facevalue[2][:] = temp
+                elif movement.direction == 1: # Clockwise
+                    path[2].facevalue[2][:] = path[1].facevalue[2][:]
+                    path[3].facevalue[2][:] = path[2].facevalue[2][:]
+                    path[0].facevalue[2][:] = path[3].facevalue[2][:]
+                    path[1].facevalue[2][:] = temp
+        elif movement.colRow == "C": # Column move
+            if movement.position == 0: # Left column
+                temp = path[0].facevalue[:][0]
+                if movement.direction == 0: # Down
+                    path[2].facevalue[:][0] = path[3].facevalue[:][0]
+                    for i in range(3):
+                        path[1].facevalue[i][0] = path[2].facevalue[2-i][0]
+                    path[0].facevalue[:][0] = path[1].facevalue[:][0]
+                    path[3].facevalue[:][0] = temp
+                elif movement.direction == 1: #Up
+                    for i in range(3):
+                        path[2].facevalue[i][0] = path[1].facevalue[2-i][0]
+                    path[3].facevalue[:][0] = path[2].facevalue[:][0]
+                    for i in range(3):
+                        path[0].facevalue[i][0] = path[3].facevalue[2-i][0]
+                    path[1].facevaluep[:][0] = temp
+            elif movement.position == 2: # Right column
+                temp = path[0].facevalue[:][2]
+                if movement.direction == 0: # Down
+                    for i in range(3):
+                        path[2].facevalue[i][0] = path[3].facevalue[2-i][2]
+                    for i in range(3):
+                        path[1].facevalue[i][2] = path[2].facevalue[2-i][0]
+                    path[0].facevalue[:][2] = path[1].facevalue[:][2]
+                    path[3].facevalue[:][2] = temp
+                elif movement.direction == 1: #Up
+                    path[2].facevalue[:][0] = path[3].facevalue[:][2]
+                    for i in range(3):
+                        path[1].facevalue[i][2] = path[2].facevalue[2-i][0]
+                    path[0].facevalue[:][2] = path[1].facevalue[:][2]
+                    path[3].facevalue[:][2] = temp
+    elif movement.face == "Left":
         exit()
-
-
+        
+    '''
     subsectionarray = []
     for i, side in enumerate(path):
         print(f"Path {i}: Face {side.centervalue}")
@@ -295,7 +356,7 @@ def move(movement:Movement, path: list[CubeSide]):
         elif i == 3: # right column
             for j in range(3):
                 side.facevalue[j][2] = new_strips[i][j]
-
+'''
 
 def printCube(cubeObject):
     # Takes a looper iterating through the desired values of the sides of the cube and prints them in a readable format
