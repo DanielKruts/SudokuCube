@@ -93,6 +93,7 @@ def initializefunction():
 # Determines whether to apply a column or row moved based on the Movement object passed to it
 def applyMovement(movement: Movement, path: list[CubeSide]):
     cube = movement.cube
+    print("Movement is", movement.name)
 
     if movement.colRow == "C":  # column move
         applyColumnMove(cube, movement, path)
@@ -104,7 +105,7 @@ def applyMovement(movement: Movement, path: list[CubeSide]):
 
 # Takes a given Cube, Movement, and path to rotate the appropriate face and apply the correct column move
 def applyColumnMove(cube: Cube, movement: Movement, path: list[CubeSide]):
-    print("Move code:", movement.name, "| face:", movement.face, "| col:", movement.colRow, "| direction:", movement.direction)
+    print("Column move:", movement.name, "| face:", movement.face, "| col:", movement.colRow, "| direction:", movement.direction)
     if movement.face == "Front":
         if movement.position == 0:  # Left column
             if movement.direction == 0:  # Down
@@ -141,7 +142,7 @@ def applyColumnMove(cube: Cube, movement: Movement, path: list[CubeSide]):
 
 # Takes the given Cube, Movement, and path to correctly rotate the appropriate face and apply the correct row move
 def applyRowMove(cube: Cube, movement: Movement, path: list[CubeSide]):
-    print("Move code:", movement.name, "| face:", movement.face, "| row:", movement.colRow, "| direction:", movement.direction)
+    print("Row move:", movement.name, "| face:", movement.face, "| row:", movement.colRow, "| direction:", movement.direction)
     if movement.face == "Front":
         if movement.position == 0:  # Top row
             if movement.direction == 0:  # Left
@@ -339,7 +340,8 @@ while(newmove == 1):
 
     match user_input:
         case "Y" | "y":
-            print("Applying Random Move")
+            print("Alright bruv")
+
             random_var = random.randint(0, 11)
             while random_var == previous_var:
                 print("Same move as last time, rerolling")
@@ -355,7 +357,7 @@ while(newmove == 1):
             heuristic(cubeObject)
             previous_var = random_var
         case "N" | "n":
-            print("Exiting Moves.")
+            print("See ya cuh")
             newmove = 0
         case _:
-            print("Invalid Input, please try again.")
+            print("Whachu mean bitch")
