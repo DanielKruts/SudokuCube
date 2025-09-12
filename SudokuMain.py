@@ -1,9 +1,8 @@
 ﻿'''
-    Authors: Daniel Krutsick and Jacob Blankenship
     Purpose: The program takes a given solved Sudoku Rubik's Cube and applies random moves to it while calculating the heuristic
                  of how far the cube is from being solved. The user can choose to apply more random moves as they see fit
                  until they decide to stop.
-    Last Updated: 9/11/2025
+    Last Updated: 9/12/2025
 '''
 #Might be removed, but starter class definitions for CubeSide and Movement
 from dis import findlinestarts
