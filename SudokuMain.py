@@ -204,10 +204,10 @@ def move(movement:Movement, path: list[CubeSide]):
             if movement.position == 0: # Top row
                 temp = path[0].facevalue[0][:]
                 if movement.direction == 0: # Clockwise
-                    path[0].facevalue[0][:] = path[3].facevalue[0][:]
-                    path[3].facevalue[0][:] = path[2].facevalue[0][:]
-                    path[2].facevalue[0][:] = path[1].facevalue[0][:]
-                    path[1].facevalue[0][:] = temp
+                    path[0].facevalue[0][:] = path[1].facevalue[0][:]
+                    path[1].facevalue[0][:] = path[2].facevalue[0][:]
+                    path[2].facevalue[0][:] = path[3].facevalue[0][:]
+                    path[3].facevalue[0][:] = temp
                 elif movement.direction == 1: # Counterclockwise
                     path[0].facevalue[0][:] = path[3].facevalue[0][:]
                     path[3].facevalue[0][:] = path[2].facevalue[0][:]
@@ -216,15 +216,15 @@ def move(movement:Movement, path: list[CubeSide]):
             elif movement.position == 2: # Bottom row
                 temp = path[0].facevalue[2][:]
                 if movement.direction == 0: # Counterclockwise
-                    path[0].facevalue[2][:] = path[3].facevalue[2][:]
-                    path[3].facevalue[2][:] = path[2].facevalue[2][:]
-                    path[2].facevalue[2][:] = path[1].facevalue[2][:]
-                    path[1].facevalue[2][:] = temp
-                elif movement.direction == 1: # Clockwise
                     path[0].facevalue[2][:] = path[1].facevalue[2][:]
                     path[1].facevalue[2][:] = path[2].facevalue[2][:]
                     path[2].facevalue[2][:] = path[3].facevalue[2][:]
                     path[3].facevalue[2][:] = temp
+                elif movement.direction == 1: # Clockwise
+                    path[0].facevalue[2][:] = path[3].facevalue[2][:]
+                    path[3].facevalue[2][:] = path[2].facevalue[2][:]
+                    path[2].facevalue[2][:] = path[1].facevalue[2][:]
+                    path[1].facevalue[2][:] = temp
         elif movement.colRow == "C": # Column move
             if movement.position == 0: # Left column
                 temp = [row[0] for row in path[0].facevalue]
@@ -237,18 +237,18 @@ def move(movement:Movement, path: list[CubeSide]):
                         path[2].facevalue[i][2] = path[3].facevalue[2-i][0]
                     for i in range(3):
                         path[3].facevalue[i][0] = temp[i]
-                elif movement.direction == 1: #Up
+                elif movement.direction == 1: # Up
                         for i in range(3):    
                             path[0].facevalue[i][0] = path[3].facevalue[i][0]
                         for i in range(3):    
                             path[3].facevalue[i][0] = path[2].facevalue[2-i][2]
                         for i in range(3):
-                            path[2].facevalue[i][2] = path[1].facevalue[2-i][0]
+                            path[2].facevalue[i][2] = path[1].facevalue[i][0]
                         for i in range(3):
                             path[1].facevalue[i][0] = temp[i]
             elif movement.position == 2: # Right column
                 temp = [row[2] for row in path[0].facevalue]
-                if movement.direction == 0: # Down
+                if movement.direction == 0: # Down  
                     for i in range(3):
                         path[0].facevalue[i][2] = path[1].facevalue[i][2]
                     for i in range(3):
@@ -269,7 +269,16 @@ def move(movement:Movement, path: list[CubeSide]):
     elif movement.face == "Left":
         if movement.position == 0: #Left column
             temp = [row[0] for row in path[0].facevalue]
-            if movement.direction == 0: # Down
+            if movement.direction == 0: # Up
+                for i in range(3):
+                    path[0].facevalue[i][0] = path[3].facevalue[2][i]
+                for i in range(3):
+                    path[3].facevalue[2][2-i] = path[2].facevalue[i][2]
+                for i in range(3):
+                    path[2].facevalue[i][2] = path[1].facevalue[0][i]
+                for i in range(3):
+                    path[1].facevalue[0][i] = temp[2-i]
+            elif movement.direction == 1: # Down
                 for i in range(3):
                     path[0].facevalue[2-i][0] = path[1].facevalue[0][i]
                 for i in range(3):
@@ -278,15 +287,6 @@ def move(movement:Movement, path: list[CubeSide]):
                     path[2].facevalue[i][2] = path[3].facevalue[2][2-i]
                 for i in range(3):
                     path[3].facevalue[2][i] = temp[i]
-            elif movement.direction == 1: # Up
-                for i in range(3):
-                    path[0].facevalue[i][0] = path[3].facevalue[2][i]
-                for i in range(3):
-                    path[3].facevalue[2][2-i] = path[2].facevalue[i][2]
-                for i in range(3):
-                    path[2].facevalue[i][2] = path[1].facevalue[0][2-i]
-                for i in range(3):
-                    path[1].facevalue[0][i] = temp[i]
         elif movement.position == 2: #Right column
             temp = [row[2] for row in path[0].facevalue]
             if movement.direction == 0: # Down
@@ -306,7 +306,7 @@ def move(movement:Movement, path: list[CubeSide]):
                 for i in range(3):
                     path[2].facevalue[i][0] = path[1].facevalue[2][i]
                 for i in range(3):
-                    path[1].facevalue[0][i] = temp[2-i]
+                    path[1].facevalue[2][i] = temp[2-i]
 def printCube(cubeObject):
     # Takes a looper iterating through the desired values of the sides of the cube and prints them in a readable format
     for i in [cubeObject.Up]:
